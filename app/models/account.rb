@@ -1,4 +1,8 @@
 class Account < ActiveRecord::Base
-  has_many :transactions
+  validates :bank_name, presence: true
+  validates :account_number, presence: true
+
   belongs_to :contributor
+  has_many :transactions
+
 end

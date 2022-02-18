@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_170051) do
+ActiveRecord::Schema.define(version: 2021_09_19_143320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,12 @@ ActiveRecord::Schema.define(version: 2021_09_06_170051) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "areas", force: :cascade do |t|
+    t.string "name"
+    t.bigint "zones_id"
+    t.index ["zones_id"], name: "index_areas_on_zones_id"
+  end
+
   create_table "contributors", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -42,6 +48,15 @@ ActiveRecord::Schema.define(version: 2021_09_06_170051) do
     t.string "phone_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "parish_id"
+    t.integer "area_id"
+    t.integer "zone_id"
+  end
+
+  create_table "parishes", force: :cascade do |t|
+    t.string "name"
+    t.bigint "areas_id"
+    t.index ["areas_id"], name: "index_parishes_on_areas_id"
   end
 
   create_table "pledges", force: :cascade do |t|
@@ -73,7 +88,13 @@ ActiveRecord::Schema.define(version: 2021_09_06_170051) do
     t.index ["projects_id"], name: "index_transactions_on_projects_id"
   end
 
+  create_table "zones", force: :cascade do |t|
+    t.string "name"
+  end
+
   add_foreign_key "accounts", "contributors", column: "contributors_id"
+  add_foreign_key "areas", "zones", column: "zones_id"
+  add_foreign_key "parishes", "areas", column: "areas_id"
   add_foreign_key "pledges", "contributors", column: "contributors_id"
   add_foreign_key "pledges", "projects", column: "projects_id"
   add_foreign_key "transactions", "accounts", column: "accounts_id"
