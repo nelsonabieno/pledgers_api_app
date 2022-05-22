@@ -8,7 +8,7 @@ class AccountController < ApplicationController
   def create
     @account = Account.new(account_params)
     @account.contributors_id = params[:id]
-    byebug
+
     if @account.save
       render json: { account: @account, message: 'account successfully created' }, status: :created
     else
@@ -39,7 +39,6 @@ class AccountController < ApplicationController
   private
 
   def account_params
-    # byebug
     # params.permit(:account_number, :bank_name, :contributors_id)
     params.permit(:account_number, :bank_name)
   end

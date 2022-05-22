@@ -5,35 +5,18 @@ class JsonWebToken
   class << self
     def encode(payload, exp = 24.hours.from_now)
       payload[:exp] = exp.to_i
-      puts "payload------ #{payload}"
       JWT.encode(payload, auth_secret, ALGORITHM)
     end
 
     def decode(token)
-      puts "token &&&& #{token}"
-      puts "auth_secret &&&& #{auth_secret}"
-      puts "ENV['AUTH_SECRET'] &&&& #{ENV['AUTH_SECRET']}"
-      puts " Rails.application.secrets.secret_key_base &&&& #{ Rails.application.secrets.secret_key_base}" #No result!
       res= JWT.decode(token, auth_secret, true, { algorithm: ALGORITHM }).first
-      # res = JWT.decode(token, auth_secret)[0]
-      # res= JWT.decode(token, auth_secret, true, { algorithm: ALGORITHM }).first
-      puts "res @@@@ #{res}"
-      # res
-      # puts "body &&&& #{body}"
       HashWithIndifferentAccess.new res
-      # puts " HashWithIndifferentAccess.new body &&&& #{ HashWithIndifferentAccess.new body}"
-      # rescue
-      #   nil
-
-    rescue JWT::DecodeError => e
-      puts "e.message} #{e.message}"
-        # raise custom error to be handled by custom handler
-        # raise ExceptionHandler::InvalidToken, e.message
-      # end
+      rescue JWT::DecodeError => e
+        puts "#{e.message}"
     end
 
     def auth_secret
-      ENV['AUTH_SECRET']
+       Rails.application.secrets.secret_key_base
     end
   end
 end

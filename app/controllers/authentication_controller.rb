@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  skip_before_action :authenticate_request
+  skip_before_action :authenticate_request, only: [:authenticate]
 
   def authenticate
     command = AuthenticateUser.call(params[:email], params[:password])
@@ -25,6 +25,6 @@ class AuthenticationController < ApplicationController
   private
 
   def fetch_user
-    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @current_user = AuthorizeApiRequest.new(request.env['HTTP_AUTHORIZATION'] || request.headers).call.result
   end
 end

@@ -1,8 +1,6 @@
 require 'jwt'
 class ApplicationController < ActionController::API
   before_action :authenticate_request
-  skip_before_action :authenticate_request, only: [:create]
-
   attr_reader :current_user
 
   private

@@ -6,11 +6,14 @@ Rails.application.routes.draw do
 
   resources :contributor do
     resources :payment
+    # resources :project, :controller => "pledge"
   end
 
   resources :account do
     resources :contributor
   end
+
+  resources :pledge
 
 
   post 'login', to: 'authentication#authenticate'

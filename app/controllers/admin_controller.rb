@@ -1,4 +1,5 @@
 class AdminController < ApplicationController
+  skip_before_action :authenticate_request, only: [:create]
   before_action :find_admin, only: [:show, :update, :destroy]
 
   def index
